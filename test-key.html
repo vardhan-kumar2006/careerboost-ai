@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔑 API Key Tester – CareerBoost AI</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background: #0a0a1a; color: #f8fafc; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; }
+    .box { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 40px; width:100%; max-width:560px; }
+    h1 { font-size:26px; font-weight:800; margin-bottom:8px; }
+    p { color:#94a3b8; font-size:14px; line-height:1.6; margin-bottom:28px; }
+    label { display:block; font-size:13px; font-weight:600; color:#94a3b8; margin-bottom:8px; }
+    input { width:100%; padding:12px 16px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:10px; color:#f8fafc; font-size:15px; outline:none; margin-bottom:16px; font-family:monospace; }
+    input:focus { border-color:#7c3aed; box-shadow:0 0 0 3px rgba(124,58,237,0.15); }
+    button { width:100%; padding:14px; background:linear-gradient(135deg,#7c3aed,#2563eb); color:white; border:none; border-radius:10px; font-size:16px; font-weight:700; cursor:pointer; transition:all 0.3s; }
+    button:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(124,58,237,0.4); }
+    button:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
+    .result { margin-top:20px; padding:18px; border-radius:10px; font-size:14px; line-height:1.6; display:none; }
+    .result.success { background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); color:#34d399; }
+    .result.error { background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); color:#f87171; }
+    .result.info { background:rgba(124,58,237,0.1); border:1px solid rgba(124,58,237,0.3); color:#a78bfa; }
+    .model-row { display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.06); font-size:14px; }
+    .model-row:last-child { border:none; }
+    .badge { padding:3px 10px; border-radius:99px; font-size:12px; font-weight:700; }
+    .badge.ok { background:rgba(16,185,129,0.15); color:#34d399; }
+    .badge.fail { background:rgba(239,68,68,0.15); color:#f87171; }
+    .badge.wait { background:rgba(245,158,11,0.15); color:#fbbf24; }
+    .spinner { display:inline-block; width:16px; height:16px; border:2px solid rgba(124,58,237,0.3); border-top-color:#7c3aed; border-radius:50%; animation:spin 0.8s linear infinite; vertical-align:middle; margin-right:8px; }
+    @keyframes spin { to{transform:rotate(360deg);} }
+    .go-back { display:block; text-align:center; margin-top:20px; color:#94a3b8; font-size:13px; text-decoration:none; }
+    .go-back:hover { color:#a78bfa; }
+    .tip { margin-top:16px; padding:14px; background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.2); border-radius:10px; font-size:13px; color:#fbbf24; line-height:1.6; display:none; }
+  </style>
+</head>
+<body>
+<div class="box">
+  <div style="font-size:40px;margin-bottom:16px;">🔑</div>
+  <h1>API Key Tester</h1>
+  <p>Paste your Gemini API key below to test which models work. This tells us exactly what's wrong so we can fix it.</p>
+
+  <label>Your Gemini API Key</label>
+  <input type="text" id="key-input" placeholder="AIza..." autocomplete="off" spellcheck="false">
+
+  <button id="test-btn" onclick="testAllModels()">🧪 Test My Key</button>
+
+  <div class="result" id="result-box">
+    <div id="result-content"></div>
+  </div>
+
+  <div class="tip" id="tip-box"></div>
+
+  <a href="index.html" class="go-back">← Back to CareerBoost AI</a>
+</div>
+
+<script>
+// model name → [apiVersion, modelId]
+const MODELS = [
+  { label: 'gemini-2.0-flash',         v: 'v1beta', id: 'gemini-2.0-flash'          },
+  { label: 'gemini-2.0-flash-lite',    v: 'v1beta', id: 'gemini-2.0-flash-lite'     },
+  { label: 'gemini-1.5-flash (v1)',    v: 'v1',     id: 'gemini-1.5-flash'           },
+  { label: 'gemini-1.5-flash (v1beta)',v: 'v1beta', id: 'gemini-1.5-flash'           },
+  { label: 'gemini-1.5-flash-8b',     v: 'v1beta', id: 'gemini-1.5-flash-8b'        },
+  { label: 'gemini-1.5-pro',           v: 'v1beta', id: 'gemini-1.5-pro'             },
+  { label: 'gemini-pro (v1)',          v: 'v1',     id: 'gemini-pro'                 },
+];
+
+async function testModel(key, model) {
+  try {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/${model.v}/models/${model.id}:generateContent?key=${key}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ role:'user', parts:[{ text:'Say only: OK' }] }],
+          generationConfig: { maxOutputTokens: 10 }
+        })
+      }
+    );
+    const data = await res.json();
+    if (res.ok) {
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '✅';
+      return { status: 'ok', msg: 'Working ✅', response: text.trim() };
+    }
+    const errMsg = data?.error?.message || `Error ${res.status}`;
+    if (res.status === 429) return { status: 'quota', msg: 'Quota exceeded ⚠️', detail: errMsg };
+    if (res.status === 400 || res.status === 401 || res.status === 403) return { status: 'auth', msg: 'Auth failed ❌', detail: errMsg };
+    return { status: 'fail', msg: `Failed (${res.status}) ❌`, detail: errMsg };
+  } catch(e) {
+    return { status: 'fail', msg: 'Network error ❌', detail: e.message };
+  }
+}
+
+async function testAllModels() {
+  const key = document.getElementById('key-input').value.trim();
+  if (!key || key.length < 10) {
+    showResult('error', '❌ Please enter a valid API key (starts with AIza...)');
+    return;
+  }
+
+  const btn = document.getElementById('test-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Testing all models...';
+
+  const resultBox = document.getElementById('result-box');
+  const resultContent = document.getElementById('result-content');
+  resultBox.style.display = 'block';
+  resultBox.className = 'result info';
+  resultContent.innerHTML = '<span class="spinner"></span> Testing your key against all Gemini models...';
+
+  const results = [];
+  let anyWorking = false;
+
+  for (const model of MODELS) {
+    resultContent.innerHTML = `<span class="spinner"></span> Testing <strong>${model.label}</strong>...`;
+    const r = await testModel(key, model);
+    results.push({ label: model.label, id: model.id, v: model.v, ...r });
+    if (r.status === 'ok') anyWorking = true;
+  }
+
+  // Show results table
+  let html = '<strong style="font-size:15px;">Model Test Results:</strong><br><br>';
+  html += results.map(r => {
+    const badgeClass = r.status === 'ok' ? 'ok' : r.status === 'quota' ? 'wait' : 'fail';
+    return `<div class="model-row">
+      <span>${r.label}</span>
+      <span class="badge ${badgeClass}">${r.msg}</span>
+    </div>`;
+  }).join('');
+
+  if (anyWorking) {
+    resultBox.className = 'result success';
+    const working = results.find(r => r.status === 'ok');
+    html += `<br>✅ <strong>${working.label}</strong> is working! Saving this key now...`;
+
+
+    // Save the key and working model
+    localStorage.setItem('cb_api_key', key);
+    localStorage.setItem('cb_working_model', workingModel);
+
+    document.getElementById('tip-box').style.display = 'block';
+    document.getElementById('tip-box').innerHTML = `
+      ✅ Key saved! Working model: <strong>${workingModel}</strong><br>
+      Go back and <strong>press Ctrl+Shift+R</strong> to reload, then try the interview again!
+    `;
+  } else {
+    resultBox.className = 'result error';
+    const hasQuota = results.some(r => r.status === 'quota');
+    const hasAuth = results.some(r => r.status === 'auth');
+
+    if (hasAuth) {
+      html += '<br><br>❌ <strong>Key is invalid.</strong> Please create a new one at <a href="https://aistudio.google.com" target="_blank" style="color:#f87171;">aistudio.google.com</a>';
+    } else if (hasQuota) {
+      html += '<br><br>⚠️ <strong>All models have quota limit: 0.</strong> This means your Google Cloud project has API restrictions.';
+      document.getElementById('tip-box').style.display = 'block';
+      document.getElementById('tip-box').innerHTML = `
+        <strong>Fix:</strong> Go to <a href="https://aistudio.google.com" target="_blank" style="color:#fbbf24;">aistudio.google.com</a> → 
+        Click "Get API key" → Click <strong>"Create API key in new project"</strong> → 
+        Paste that new key here and test again.
+      `;
+    }
+  }
+
+  resultContent.innerHTML = html;
+  btn.disabled = false;
+  btn.innerHTML = '🔄 Test Again';
+}
+
+function showResult(type, msg) {
+  const box = document.getElementById('result-box');
+  box.style.display = 'block';
+  box.className = `result ${type}`;
+  document.getElementById('result-content').innerHTML = msg;
+}
+
+// Pre-fill if key already saved
+window.onload = () => {
+  const saved = localStorage.getItem('cb_api_key');
+  if (saved) document.getElementById('key-input').value = saved;
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Answer Library – CareerBoost AI</title>
+  <meta name="description" content="Browse 100+ most-asked interview questions with AI-crafted model answers. Filter by category and master your interview communication.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+</head>
+<body>
+
+<div class="bg-animated">
+  <div class="bg-orb"></div><div class="bg-orb"></div><div class="bg-orb"></div>
+</div>
+
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">🚀</div>
+    <span class="nav-logo-text">CareerBoost AI</span>
+  </a>
+  <div class="nav-links" id="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="interview.html" class="nav-link">AI Interview</a>
+    <a href="resume.html" class="nav-link">Resume Builder</a>
+    <a href="roadmap.html" class="nav-link">Roadmap</a>
+    <a href="library.html" class="nav-link active">Answer Library</a>
+  </div>
+  <div class="nav-right">
+    <button class="theme-toggle-btn" id="theme-toggle" title="Toggle light/dark mode">
+      <span class="icon-dark">🌙</span>
+      <span class="icon-light">☀️</span>
+    </button>
+    <button class="nav-api-btn open-api-modal">🔑 API Key</button>
+    <button class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<main class="page-content">
+  <div class="page-hero">
+    <div class="page-hero-badge">💡 100+ Questions</div>
+    <h1 class="page-hero-title">Answer <span class="gradient-text">Library</span></h1>
+    <p class="page-hero-subtitle">Master the most common interview questions with model answers. Click any question to see an ideal response — then get AI to personalize it for you.</p>
+  </div>
+
+  <div class="library-wrap">
+
+    <!-- Search -->
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="form-input" id="lib-search" placeholder="Search questions..." oninput="filterQuestions()" style="padding-left:44px;">
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-row" id="filter-row">
+      <button class="filter-chip active" data-cat="all" onclick="setFilter('all')">All Questions</button>
+      <button class="filter-chip" data-cat="behavioral" onclick="setFilter('behavioral')">🧠 Behavioral</button>
+      <button class="filter-chip" data-cat="technical" onclick="setFilter('technical')">💻 Technical</button>
+      <button class="filter-chip" data-cat="hr" onclick="setFilter('hr')">🤝 HR Round</button>
+      <button class="filter-chip" data-cat="coding" onclick="setFilter('coding')">⌨️ Coding Concepts</button>
+      <button class="filter-chip" data-cat="situational" onclick="setFilter('situational')">💼 Situational</button>
+    </div>
+
+    <!-- Generate New AI Questions -->
+    <div class="card card-p mb-24" style="background:linear-gradient(135deg,rgba(16,185,129,0.07),rgba(37,99,235,0.07));border-color:rgba(16,185,129,0.25);margin-bottom:20px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+        <div>
+          <div style="font-size:16px;font-weight:700;margin-bottom:4px;">✨ Generate Fresh Questions</div>
+          <div style="font-size:13px;color:var(--text-secondary);">Pick a job role and get 20 new AI-generated Q&amp;As added to the library instantly.</div>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="toggleAIGenSection()">🔄 Generate New</button>
+      </div>
+      <div id="ai-gen-section" style="display:none;margin-top:16px;border-top:1px solid var(--border);padding-top:16px;">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;">
+          <div style="flex:1;min-width:200px;">
+            <label class="form-label" style="margin-bottom:6px;">Job Role</label>
+            <select class="form-select" id="lib-role">
+              <option value="Software Engineer">Software Engineer</option>
+              <option value="Frontend Developer">Frontend Developer</option>
+              <option value="Backend Developer">Backend Developer</option>
+              <option value="Full Stack Developer">Full Stack Developer</option>
+              <option value="Data Scientist">Data Scientist</option>
+              <option value="ML / AI Engineer">ML / AI Engineer</option>
+              <option value="DevOps Engineer">DevOps Engineer</option>
+              <option value="Product Manager">Product Manager</option>
+              <option value="Data Analyst">Data Analyst</option>
+              <option value="Fresher (Any Tech Role)">Fresher (Any Tech Role)</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" id="lib-gen-btn" onclick="generateLibraryQuestions()" style="white-space:nowrap;">
+            🚀 Generate 20 Questions
+          </button>
+        </div>
+        <div id="lib-gen-status" style="margin-top:10px;font-size:13px;color:var(--text-secondary);display:none;">
+          <span style="display:inline-block;width:14px;height:14px;border:2px solid rgba(124,58,237,0.3);border-top-color:var(--purple);border-radius:50%;animation:spin 0.8s linear infinite;vertical-align:middle;margin-right:6px;"></span>
+          Generating questions...
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div style="font-size:13px;color:var(--text-muted);margin-bottom:20px;" id="q-count">Showing all questions</div>
+
+
+    <!-- AI Generate Button -->
+    <div class="card card-p mb-24" style="background:linear-gradient(135deg,rgba(124,58,237,0.08),rgba(37,99,235,0.08));border-color:rgba(124,58,237,0.2);">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+        <div>
+          <div style="font-size:16px;font-weight:700;margin-bottom:4px;">🤖 Want a personalized answer?</div>
+          <div style="font-size:13px;color:var(--text-secondary);">Type any question below and get an AI-generated answer tailored to your background.</div>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="toggleAiGen()">Generate Custom Answer</button>
+      </div>
+      <div id="ai-gen-area" class="hidden" style="margin-top:20px;border-top:1px solid var(--border);padding-top:20px;">
+        <div class="form-group">
+          <label class="form-label">Your Question</label>
+          <input type="text" class="form-input" id="custom-q" placeholder="e.g. Tell me about a time you failed...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Your Role / Context (optional)</label>
+          <input type="text" class="form-input" id="custom-role" placeholder="e.g. Computer Science student applying for Frontend Developer intern">
+        </div>
+        <button class="btn btn-primary" onclick="generateCustomAnswer()">✨ Generate Answer</button>
+        <div id="custom-answer-output" class="hidden" style="margin-top:20px;">
+          <div class="best-answer-box">
+            <div class="best-answer-label">✨ Your Personalized Answer</div>
+            <div class="best-answer-text" id="custom-answer-text"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q&A List -->
+    <div id="qa-list">
+      <!-- Filled by JS -->
+    </div>
+
+  </div>
+</main>
+
+<!-- API MODAL -->
+<div class="modal-overlay" id="api-modal">
+  <div class="modal" style="position:relative;">
+    <div class="modal-icon">🔑</div>
+    <h2 class="modal-title">Set Your Gemini API Key</h2>
+    <p class="modal-desc">Required for AI-generated answers. <a href="https://aistudio.google.com" target="_blank" style="color:var(--purple-light);">Get free key →</a></p>
+    <div class="form-group">
+      <label class="form-label">API Key</label>
+      <div style="display:flex;gap:8px;">
+        <input type="password" id="api-key-input" class="form-input" placeholder="AIza..." style="flex:1;">
+        <button id="api-key-toggle" style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:0 14px;cursor:pointer;font-size:18px;">👁️</button>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button id="api-key-save" class="btn btn-primary w-full">Save API Key 🔒</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/library.js"></script>
+</body>
+</html>

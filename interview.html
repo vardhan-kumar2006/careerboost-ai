@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Interview Prep – CareerBoost AI</title>
+  <meta name="description" content="Get 50 ultra-realistic interview questions and answers for your job role. Powered by AI. Study, prepare, and get hired.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <style>
+    /* ── Inline styles specific to interview page ── */
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Setup card */
+    .setup-card { max-width: 680px; margin: 0 auto; }
+
+    /* Q&A section */
+    #qa-section { display: none; }
+    #qa-section.visible { display: block; }
+
+    /* Filter tabs */
+    .filter-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .filter-tab {
+      padding: 7px 18px; border-radius: 99px; font-size: 13px; font-weight: 600;
+      border: 1.5px solid var(--border); background: transparent; cursor: pointer;
+      color: var(--text-secondary); transition: var(--transition);
+    }
+    .filter-tab:hover { border-color: rgba(124,58,237,0.5); color: var(--text-primary); }
+    .filter-tab.active {
+      background: linear-gradient(135deg, var(--purple), var(--blue));
+      border-color: transparent; color: white;
+    }
+
+    /* Search */
+    .qa-search-wrap { position: relative; margin-bottom: 24px; }
+    .qa-search-wrap input {
+      width: 100%; padding: 12px 16px 12px 44px;
+      background: var(--bg-card); border: 1.5px solid var(--border);
+      border-radius: 12px; color: var(--text-primary); font-size: 14px;
+    }
+    .qa-search-wrap input:focus { border-color: var(--purple); outline: none; }
+    .qa-search-icon {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      font-size: 18px; pointer-events: none;
+    }
+
+    /* Q&A Card */
+    .qa-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 22px; margin-bottom: 16px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .qa-card:hover { border-color: rgba(124,58,237,0.3); box-shadow: 0 4px 24px rgba(124,58,237,0.08); }
+    .qa-card-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+    .qa-num {
+      min-width: 32px; height: 32px; border-radius: 8px;
+      background: linear-gradient(135deg, var(--purple), var(--blue));
+      color: white; font-size: 13px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .qa-badges { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; }
+    .badge {
+      padding: 3px 10px; border-radius: 99px; font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .badge-tech    { background: rgba(37,99,235,0.15);  color: #60a5fa; border: 1px solid rgba(37,99,235,0.3); }
+    .badge-behav   { background: rgba(124,58,237,0.15); color: #a78bfa; border: 1px solid rgba(124,58,237,0.3); }
+    .badge-hr      { background: rgba(6,182,212,0.15);  color: #67e8f9; border: 1px solid rgba(6,182,212,0.3); }
+    .badge-situ    { background: rgba(245,158,11,0.15); color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); }
+    .badge-easy    { background: rgba(16,185,129,0.12); color: var(--green); border: 1px solid rgba(16,185,129,0.25); }
+    .badge-medium  { background: rgba(245,158,11,0.12); color: var(--orange); border: 1px solid rgba(245,158,11,0.25); }
+    .badge-hard    { background: rgba(239,68,68,0.12);  color: var(--red);   border: 1px solid rgba(239,68,68,0.25); }
+
+    .qa-question {
+      font-size: 16px; font-weight: 700; color: var(--text-primary);
+      line-height: 1.5; margin-bottom: 14px;
+    }
+    .qa-divider {
+      height: 1px; background: var(--border); margin-bottom: 14px;
+    }
+    .qa-answer-label {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 1.5px; color: var(--green); margin-bottom: 8px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .qa-answer {
+      font-size: 14px; line-height: 1.75; color: var(--text-secondary);
+    }
+
+    /* Stats bar */
+    .qa-stats {
+      display: flex; gap: 20px; flex-wrap: wrap; align-items: center;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px 20px; margin-bottom: 24px;
+    }
+    .qa-stat { font-size: 13px; color: var(--text-secondary); }
+    .qa-stat strong { color: var(--text-primary); }
+
+    /* Loading state */
+    .loading-state {
+      text-align: center; padding: 60px 20px;
+    }
+    .loading-spinner-big {
+      width: 56px; height: 56px; border-radius: 50%;
+      border: 4px solid rgba(124,58,237,0.2); border-top-color: var(--purple);
+      animation: spin 0.9s linear infinite; margin: 0 auto 20px;
+    }
+    .loading-progress {
+      max-width: 300px; margin: 16px auto 0;
+      height: 4px; background: rgba(255,255,255,0.1); border-radius: 99px; overflow: hidden;
+    }
+    .loading-progress-fill {
+      height: 100%; background: linear-gradient(90deg, var(--purple), var(--cyan));
+      border-radius: 99px; transition: width 0.4s ease;
+    }
+
+    /* ── Doubt Chat ── */
+    #chat-bubble {
+      position: fixed; bottom: 24px; right: 24px; z-index: 500;
+      width: 56px; height: 56px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--purple), var(--blue));
+      border: none; cursor: pointer; font-size: 24px;
+      box-shadow: 0 4px 24px rgba(124,58,237,0.5);
+      display: flex; align-items: center; justify-content: center;
+      transition: var(--transition);
+    }
+    #chat-bubble:hover { transform: scale(1.1); box-shadow: 0 8px 32px rgba(124,58,237,0.6); }
+    #chat-panel {
+      position: fixed; bottom: 90px; right: 24px; z-index: 500;
+      width: 360px; max-height: 520px;
+      background: var(--bg-secondary); border: 1px solid var(--border);
+      border-radius: 20px; display: none; flex-direction: column;
+      box-shadow: 0 16px 60px rgba(0,0,0,0.4);
+      overflow: hidden;
+    }
+    #chat-panel.open { display: flex; }
+    .chat-header {
+      padding: 16px 18px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(37,99,235,0.1));
+    }
+    .chat-header-title { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+    .chat-close { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 18px; }
+    .chat-messages {
+      flex: 1; overflow-y: auto; padding: 16px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .chat-msg {
+      max-width: 85%; padding: 10px 14px; border-radius: 12px; font-size: 13px; line-height: 1.6;
+    }
+    .chat-msg.user {
+      background: linear-gradient(135deg, var(--purple), var(--blue));
+      color: white; align-self: flex-end; border-radius: 12px 12px 2px 12px;
+    }
+    .chat-msg.ai {
+      background: var(--bg-card); color: var(--text-primary);
+      border: 1px solid var(--border); align-self: flex-start; border-radius: 12px 12px 12px 2px;
+    }
+    .chat-msg.ai.loading { color: var(--text-muted); font-style: italic; }
+    .chat-input-row {
+      padding: 12px; border-top: 1px solid var(--border);
+      display: flex; gap: 8px;
+    }
+    .chat-input-row input {
+      flex: 1; padding: 10px 14px;
+      background: var(--bg-card); border: 1.5px solid var(--border);
+      border-radius: 10px; color: var(--text-primary); font-size: 13px;
+    }
+    .chat-input-row input:focus { border-color: var(--purple); outline: none; }
+    .chat-send-btn {
+      width: 40px; height: 40px; border-radius: 10px; border: none;
+      background: linear-gradient(135deg, var(--purple), var(--blue));
+      color: white; cursor: pointer; font-size: 16px;
+      display: flex; align-items: center; justify-content: center;
+      transition: var(--transition);
+    }
+    .chat-send-btn:hover { transform: scale(1.05); }
+
+    /* Notification dot on chat button */
+    .chat-dot {
+      position: absolute; top: -2px; right: -2px; width: 14px; height: 14px;
+      border-radius: 50%; background: var(--green);
+      border: 2px solid var(--bg-primary); display: none;
+    }
+
+    /* Light theme overrides */
+    [data-theme="light"] .qa-card { background: #fff; }
+    [data-theme="light"] .qa-stats { background: #fff; }
+    [data-theme="light"] #chat-panel { background: #f8f9fa; }
+    [data-theme="light"] .chat-msg.ai { background: #fff; }
+    [data-theme="light"] .chat-input-row input { background: #fff; }
+
+    @media (max-width: 480px) {
+      #chat-panel { width: calc(100vw - 32px); right: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-animated">
+  <div class="bg-orb"></div><div class="bg-orb"></div><div class="bg-orb"></div>
+</div>
+
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">🚀</div>
+    <span class="nav-logo-text">CareerBoost AI</span>
+  </a>
+  <div class="nav-links" id="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="interview.html" class="nav-link active">AI Interview</a>
+    <a href="resume.html" class="nav-link">Resume Builder</a>
+    <a href="roadmap.html" class="nav-link">Roadmap</a>
+    <a href="library.html" class="nav-link">Answer Library</a>
+  </div>
+  <div class="nav-right">
+    <button class="theme-toggle-btn" id="theme-toggle" title="Toggle theme">
+      <span class="icon-dark">🌙</span><span class="icon-light">☀️</span>
+    </button>
+    <button class="nav-api-btn open-api-modal">🔑 API Key</button>
+    <button class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<main class="page-content">
+  <div class="page-hero">
+    <div class="page-hero-badge">🎯 Interview Prep</div>
+    <h1 class="page-hero-title">Realistic <span class="gradient-text">Interview Q&amp;A</span></h1>
+    <p class="page-hero-subtitle">Get up to 50 real interview questions with expert answers — tailored to your exact job role. Study, prepare, and get hired.</p>
+  </div>
+
+  <!-- ══ SETUP CARD ══ -->
+  <div class="setup-card" id="setup-section" style="padding: 0 20px 40px;">
+    <div class="card card-p">
+
+      <!-- File upload -->
+      <div class="form-group">
+        <label class="form-label">📄 Upload Your Resume <span style="color:var(--text-muted);font-weight:400;">(optional — makes questions more personalized)</span></label>
+        <label class="upload-zone" for="resume-file" id="upload-zone" style="cursor:pointer;display:block;">
+          <div class="upload-icon-wrap">📄</div>
+          <div class="upload-title" id="upload-title">Drop your resume here</div>
+          <div class="upload-subtitle">or tap to browse — PDF only</div>
+        </label>
+        <input type="file" id="resume-file" accept=".pdf" style="display:none">
+      </div>
+
+      <!-- Role + Count -->
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">Target Job Role <span style="color:var(--red);">*</span></label>
+          <select class="form-select" id="job-role" onchange="handleRoleChange(this)">
+            <option value="">— Select a role —</option>
+            <option value="Software Engineer">Software Engineer (General)</option>
+            <option value="Software Developer">Software Developer</option>
+            <option value="Software Tester">Software Tester</option>
+            <option value="Manual Tester">Manual Tester</option>
+            <option value="Automation Tester">Automation Tester</option>
+            <option value="Software Developer and Tester">Software Developer and Tester</option>
+            <option value="Frontend Developer">Frontend Developer</option>
+            <option value="Backend Developer">Backend Developer</option>
+            <option value="Full Stack Developer">Full Stack Developer</option>
+            <option value="Data Scientist">Data Scientist</option>
+            <option value="Machine Learning Engineer">ML / AI Engineer</option>
+            <option value="DevOps Engineer">DevOps / Cloud Engineer</option>
+            <option value="Product Manager">Product Manager</option>
+            <option value="UI/UX Designer">UI/UX Designer</option>
+            <option value="Business Analyst">Business Analyst</option>
+            <option value="Data Analyst">Data Analyst</option>
+            <option value="Cybersecurity Analyst">Cybersecurity Analyst</option>
+            <option value="Android Developer">Android Developer</option>
+            <option value="iOS Developer">iOS Developer</option>
+            <option value="Fresher (Any Tech Role)">Fresher (Any Tech Role)</option>
+            <option value="other">✏️ Other — Type your own role</option>
+          </select>
+          <!-- Custom role input shown when Other is selected -->
+          <input
+            type="text"
+            id="custom-role"
+            class="form-input"
+            placeholder="e.g. Java Developer, Network Engineer..."
+            style="display:none;margin-top:10px;"
+          >
+        </div>
+        <div class="form-group">
+          <label class="form-label">Number of Questions</label>
+          <select class="form-select" id="q-count">
+            <option value="25">25 Questions (Quick Study)</option>
+            <option value="40">40 Questions (Standard)</option>
+            <option value="50" selected>50 Questions (Full Prep)</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn btn-primary w-full" id="generate-btn" onclick="generateQuestions()" style="font-size:16px;padding:16px;margin-top:4px;">
+        🎯 Generate Interview Questions
+      </button>
+      <div style="text-align:center;margin-top:10px;font-size:12px;color:var(--text-muted);">
+        💡 Questions are generated fresh every time — extremely realistic, based on real interviews
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ LOADING STATE ══ -->
+  <div id="loading-section" style="display:none;padding:0 20px 40px;">
+    <div class="loading-state">
+      <div class="loading-spinner-big"></div>
+      <div style="font-size:18px;font-weight:700;color:var(--text-primary);">Generating your interview questions...</div>
+      <div style="font-size:14px;color:var(--text-secondary);margin-top:8px;" id="loading-msg">Researching real interview experiences for this role</div>
+      <div class="loading-progress"><div class="loading-progress-fill" id="loading-bar" style="width:5%;"></div></div>
+      <div style="font-size:12px;color:var(--text-muted);margin-top:12px;" id="loading-count">Preparing batch 1...</div>
+    </div>
+  </div>
+
+  <!-- ══ Q&A SECTION ══ -->
+  <div id="qa-section" style="padding:0 20px 100px;max-width:900px;margin:0 auto;">
+
+    <!-- Header -->
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+      <div>
+        <h2 style="font-size:22px;font-weight:800;color:var(--text-primary);" id="qa-title">Interview Q&amp;A</h2>
+        <div style="font-size:13px;color:var(--text-secondary);margin-top:2px;" id="qa-subtitle"></div>
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button class="btn btn-secondary" id="take-quiz-btn" onclick="startQuiz()" style="font-size:13px;padding:8px 16px;background:rgba(124,58,237,0.1);border-color:rgba(124,58,237,0.3);color:var(--purple-light);">
+          ✏️ Take Quiz
+        </button>
+        <button class="btn btn-outline" onclick="resetToSetup()" style="font-size:13px;padding:8px 16px;">
+          ← Generate New
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="qa-stats" id="qa-stats"></div>
+
+    <!-- Filter tabs -->
+    <div class="filter-tabs" id="filter-tabs">
+      <button class="filter-tab active" onclick="filterBy('all', this)">All</button>
+      <button class="filter-tab" onclick="filterBy('Technical', this)">🔧 Technical</button>
+      <button class="filter-tab" onclick="filterBy('Behavioral', this)">🧠 Behavioral</button>
+      <button class="filter-tab" onclick="filterBy('HR', this)">👔 HR</button>
+      <button class="filter-tab" onclick="filterBy('Situational', this)">💡 Situational</button>
+    </div>
+
+    <!-- Search -->
+    <div class="qa-search-wrap">
+      <span class="qa-search-icon">🔍</span>
+      <input type="text" id="qa-search" placeholder="Search questions and answers..." oninput="searchQA(this.value)">
+    </div>
+
+    <!-- Q&A List -->
+    <div id="qa-list"></div>
+
+    <!-- Generating more indicator -->
+    <div id="generating-more" style="display:none;text-align:center;padding:20px;">
+      <div style="display:inline-flex;align-items:center;gap:10px;font-size:13px;color:var(--text-secondary);background:var(--bg-card);border:1px solid var(--border);padding:10px 20px;border-radius:99px;">
+        <div style="width:14px;height:14px;border:2px solid rgba(124,58,237,0.3);border-top-color:var(--purple);border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+        Generating more questions...
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ QUIZ SECTION ══ -->
+  <div id="quiz-section" class="quiz-section" style="padding:0 20px 100px;max-width:750px;margin:0 auto;">
+    <!-- Header -->
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+      <div>
+        <h2 style="font-size:22px;font-weight:800;color:var(--text-primary);">Interactive Quiz</h2>
+        <div style="font-size:13px;color:var(--text-secondary);margin-top:2px;" id="quiz-role-subtitle">Testing your knowledge</div>
+      </div>
+      <button class="btn btn-outline" onclick="exitQuiz()" style="font-size:13px;padding:8px 16px;">
+        ✕ Exit Quiz
+      </button>
+    </div>
+
+    <!-- Quiz Loading Spinner -->
+    <div id="quiz-loading" style="display:none;text-align:center;padding:60px 20px;">
+      <div class="loading-spinner-big"></div>
+      <div style="font-size:18px;font-weight:700;color:var(--text-primary);margin-top:20px;">Generating your custom quiz...</div>
+      <div style="font-size:14px;color:var(--text-secondary);margin-top:8px;">Compiling a 20-30 question mix of MCQs, blanks, and short answers</div>
+    </div>
+
+    <!-- Active Quiz Area -->
+    <div id="quiz-active-area" style="display:none;">
+      <!-- Progress Bar -->
+      <div class="quiz-progress-wrap">
+        <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+      </div>
+
+      <!-- Question Card -->
+      <div class="quiz-card" id="quiz-question-card">
+        <!-- Will be dynamically injected by JS -->
+      </div>
+    </div>
+
+    <!-- Quiz Results Area -->
+    <div id="quiz-results-area" style="display:none;">
+      <!-- Score summary card -->
+      <div class="quiz-results-card" id="quiz-results-summary">
+        <!-- Will be dynamically injected by JS -->
+      </div>
+
+      <!-- Review Section -->
+      <div class="quiz-review-section-title">Review Answers</div>
+      <div id="quiz-review-list">
+        <!-- Question review items injected here -->
+      </div>
+
+      <!-- Actions -->
+      <div style="margin-top:30px;display:flex;justify-content:center;gap:12px;">
+        <button class="btn btn-primary" onclick="restartQuiz()">🔄 Retake Quiz</button>
+        <button class="btn btn-outline" onclick="exitQuiz()">✕ Back to Q&amp;A List</button>
+    </div>
+  </div>
+
+
+
+</main>
+
+<!-- ══ FLOATING DOUBT CHAT ══ -->
+<button id="chat-bubble" onclick="toggleChat()" title="Ask AI a doubt">
+  💬
+  <div class="chat-dot" id="chat-dot"></div>
+</button>
+
+<div id="chat-panel">
+  <div class="chat-header">
+    <div>
+      <div class="chat-header-title">💬 Ask AI — Clear Your Doubts</div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:2px;" id="chat-context-label">Ask anything about your interview prep</div>
+    </div>
+    <button class="chat-close" onclick="toggleChat()">✕</button>
+  </div>
+  <div class="chat-messages" id="chat-messages">
+    <div class="chat-msg ai">👋 Hi! I'm your interview coach. Ask me anything — about a question, concept, how to answer, or any career doubt!</div>
+  </div>
+  <div class="chat-input-row">
+    <input type="text" id="chat-input" placeholder="Type your doubt here..." onkeydown="if(event.key==='Enter') sendDoubt()">
+    <button class="chat-send-btn" onclick="sendDoubt()">➤</button>
+  </div>
+</div>
+
+<!-- API MODAL (filled by app.js) -->
+<div class="modal-overlay" id="api-modal">
+  <div class="modal"></div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/interview.js"></script>
+</body>
+</html>

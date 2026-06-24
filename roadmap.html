@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interview Roadmap – CareerBoost AI</title>
+  <meta name="description" content="Learn exactly how many interview rounds there are, what each round tests, and how to ace every stage from aptitude to HR final round.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗺️</text></svg>">
+  <style>
+    /* Roadmap Practice Styles */
+    .practice-btn {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .practice-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+    }
+    
+    .qa-practice-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+      margin-bottom: 12px;
+    }
+    .qa-practice-card:hover {
+      border-color: rgba(124, 58, 237, 0.3);
+    }
+    
+    .qa-practice-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+    }
+    
+    .qa-practice-q {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+    
+    .qa-practice-toggle {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 18px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      padding: 0;
+      line-height: 1;
+    }
+    .qa-practice-toggle.open {
+      transform: rotate(180deg);
+    }
+    
+    .qa-practice-body {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px dashed var(--border);
+      display: none;
+    }
+    .qa-practice-body.open {
+      display: block;
+    }
+    
+    .qa-practice-answer-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--green);
+      margin-bottom: 6px;
+    }
+    
+    .qa-practice-answer {
+      font-size: 13.5px;
+      line-height: 1.7;
+      color: var(--text-secondary);
+    }
+    
+    /* Loading spinner */
+    .loading-spinner-big {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 4px solid rgba(124,58,237,0.2);
+      border-top-color: var(--purple);
+      animation: spin 0.9s linear infinite;
+      margin: 0 auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-animated">
+  <div class="bg-orb"></div><div class="bg-orb"></div><div class="bg-orb"></div>
+</div>
+
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">🚀</div>
+    <span class="nav-logo-text">CareerBoost AI</span>
+  </a>
+  <div class="nav-links" id="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="interview.html" class="nav-link">AI Interview</a>
+    <a href="resume.html" class="nav-link">Resume Builder</a>
+    <a href="roadmap.html" class="nav-link active">Roadmap</a>
+    <a href="library.html" class="nav-link">Answer Library</a>
+  </div>
+  <div class="nav-right">
+    <button class="theme-toggle-btn" id="theme-toggle" title="Toggle light/dark mode">
+      <span class="icon-dark">🌙</span>
+      <span class="icon-light">☀️</span>
+    </button>
+    <button class="nav-api-btn open-api-modal">🔑 API Key</button>
+    <button class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<main class="page-content">
+  <div class="page-hero">
+    <div class="page-hero-badge">🗺️ Complete Guide</div>
+    <h1 class="page-hero-title">Interview <span class="gradient-text">Roadmap</span></h1>
+    <p class="page-hero-subtitle">Understand exactly what happens at every stage of a tech interview process — from application to offer letter.</p>
+  </div>
+
+  <div class="roadmap-wrap">
+
+    <!-- Overview Card -->
+    <div class="card card-p-lg mb-32" style="background:linear-gradient(135deg,rgba(124,58,237,0.1),rgba(37,99,235,0.1));border-color:rgba(124,58,237,0.2);">
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+        <div style="font-size:48px;">💡</div>
+        <div>
+          <h2 style="font-size:20px;font-weight:700;margin-bottom:6px;">What to Expect</h2>
+          <p style="font-size:14px;color:var(--text-secondary);line-height:1.65;max-width:600px;">Most tech companies follow a 5-6 round interview process. Each round eliminates candidates, so preparation for each stage is crucial. On average, only <strong style="color:var(--purple-light);">1-3%</strong> of applicants receive an offer at top companies.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="timeline">
+
+      <!-- Round 1 -->
+      <div class="timeline-item">
+        <div class="timeline-dot">
+          <div class="dot-circle" style="background:linear-gradient(135deg,#7c3aed,#2563eb);">1</div>
+        </div>
+        <div class="timeline-content card card-p">
+          <div class="round-badge" style="background:rgba(124,58,237,0.1);color:var(--purple-light);border:1px solid rgba(124,58,237,0.25);">📝 Round 1</div>
+          <div class="timeline-title">Online Application + Resume Screening</div>
+          <div class="timeline-desc">The first filter. Your resume is scanned by ATS (Applicant Tracking System) software before a human ever sees it. Keywords, formatting, and relevance matter enormously here.</div>
+          <ul class="tips-list">
+            <li>Use keywords directly from the job description</li>
+            <li>Keep resume to 1 page if you have under 3 years experience</li>
+            <li>Use standard section headings (Education, Experience, Skills)</li>
+            <li>Quantify achievements: "Improved load time by 40%" not "Made it faster"</li>
+            <li>No photos, no fancy graphics — ATS can't read them</li>
+          </ul>
+          <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;">
+            <a href="resume.html" class="btn btn-outline btn-sm">✨ Build ATS-Ready Resume →</a>
+            <button class="btn btn-primary btn-sm practice-btn" data-round="1" onclick="startPractice(1)">📝 Practice Screening Q&As</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Round 2 -->
+      <div class="timeline-item">
+        <div class="timeline-dot">
+          <div class="dot-circle" style="background:linear-gradient(135deg,#2563eb,#06b6d4);">2</div>
+        </div>
+        <div class="timeline-content card card-p">
+          <div class="round-badge" style="background:rgba(6,182,212,0.1);color:var(--cyan);border:1px solid rgba(6,182,212,0.25);">📞 Round 2</div>
+          <div class="timeline-title">Aptitude / Online Assessment Test</div>
+          <div class="timeline-desc">Most companies use platforms like HackerRank, Codility, or AMCAT to filter candidates. This round usually includes aptitude, coding, and sometimes verbal/logical reasoning.</div>
+          <ul class="tips-list">
+            <li>Practice DSA basics: Arrays, Strings, Sorting, Searching</li>
+            <li>Solve 2-3 LeetCode Easy problems daily for 2 weeks before applying</li>
+            <li>Practice mental math and logical reasoning on IndiaBix or PrepInsta</li>
+            <li>Read questions fully before coding — time management is key</li>
+            <li>Write working code first, optimize later</li>
+          </ul>
+          <div style="margin-top:16px;">
+            <button class="btn btn-primary btn-sm practice-btn" data-round="2" onclick="startPractice(2)">📝 Practice Aptitude Q&As</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Round 3 -->
+      <div class="timeline-item">
+        <div class="timeline-dot">
+          <div class="dot-circle" style="background:linear-gradient(135deg,#06b6d4,#10b981);">3</div>
+        </div>
+        <div class="timeline-content card card-p">
+          <div class="round-badge" style="background:rgba(16,185,129,0.1);color:var(--green);border:1px solid rgba(16,185,129,0.25);">💻 Round 3</div>
+          <div class="timeline-title">Technical Interview — Round 1</div>
+          <div class="timeline-desc">A 45-60 minute video/in-person call with a software engineer. Expect live coding, data structures, algorithms, and questions about your projects.</div>
+          <ul class="tips-list">
+            <li>Think out loud — interviewers want to see your process, not just the answer</li>
+            <li>Start with a brute-force solution, then optimize</li>
+            <li>Know time & space complexity for all solutions</li>
+            <li>Be ready to explain every line of code on your resume</li>
+            <li>Ask clarifying questions before coding</li>
+            <li>Practice on a whiteboard or paper — not just an IDE</li>
+          </ul>
+          <div style="margin-top:16px;">
+            <button class="btn btn-primary btn-sm practice-btn" data-round="3" onclick="startPractice(3)">📝 Practice Technical Q&As</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Round 4 -->
+      <div class="timeline-item">
+        <div class="timeline-dot">
+          <div class="dot-circle" style="background:linear-gradient(135deg,#10b981,#f59e0b);">4</div>
+        </div>
+        <div class="timeline-content card card-p">
+          <div class="round-badge" style="background:rgba(245,158,11,0.1);color:var(--orange);border:1px solid rgba(245,158,11,0.25);">🏗️ Round 4</div>
+          <div class="timeline-title">Technical Interview — Round 2 (System Design)</div>
+          <div class="timeline-desc">For mid-senior roles. You're asked to design a system like "Design Twitter" or "Build a URL shortener". Tests your understanding of scalability, databases, APIs, and architecture.</div>
+          <ul class="tips-list">
+            <li>Clarify requirements and scale (users, requests/second) first</li>
+            <li>Draw a high-level diagram before going deep</li>
+            <li>Know: Load Balancers, Caching, SQL vs NoSQL, CDN, Message Queues</li>
+            <li>Discuss trade-offs for every decision you make</li>
+            <li>For freshers: this may be a deeper CS concepts round instead</li>
+          </ul>
+          <div style="margin-top:16px;">
+            <button class="btn btn-primary btn-sm practice-btn" data-round="4" onclick="startPractice(4)">📝 Practice System Design Q&As</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Round 5 -->
+      <div class="timeline-item">
+        <div class="timeline-dot">
+          <div class="dot-circle" style="background:linear-gradient(135deg,#f59e0b,#ef4444);">5</div>
+        </div>
+        <div class="timeline-content card card-p">
+          <div class="round-badge" style="background:rgba(239,68,68,0.1);color:var(--red);border:1px solid rgba(239,68,68,0.25);">🧠 Round 5</div>
+          <div class="timeline-title">Managerial / Behavioral Round</div>
+          <div class="timeline-desc">A conversation with a team lead or manager. They're assessing your soft skills, cultural fit, teamwork ability, and how you handle challenges.</div>
+          <ul class="tips-list">
+            <li>Use the STAR method: Situation, Task, Action, Result</li>
+            <li>Prepare 5-6 stories: leadership, conflict, failure, success, learning</li>
+            <li>Research the company culture and values beforehand</li>
+            <li>Show genuine curiosity — ask smart questions about the team</li>
+            <li>Be honest about weaknesses, but always show what you're doing to improve</li>
+          </ul>
+          <div style="margin-top:16px;">
+            <button class="btn btn-primary btn-sm practice-btn" data-round="5" onclick="startPractice(5)">📝 Practice Behavioral Q&As</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Round 6 -->
+      <div class="timeline-item">
+        <div class="timeline-dot">
+          <div class="dot-circle" style="background:linear-gradient(135deg,#7c3aed,#10b981);">6</div>
+        </div>
+        <div class="timeline-content card card-p">
+          <div class="round-badge" style="background:rgba(16,185,129,0.1);color:var(--green);border:1px solid rgba(16,185,129,0.25);">🤝 Round 6</div>
+          <div class="timeline-title">HR Round — Offer Negotiation</div>
+          <div class="timeline-desc">The final round. HR confirms your background, discusses compensation, joining date, and company policies. This is also where you negotiate your salary.</div>
+          <ul class="tips-list">
+            <li>Research salary ranges on Glassdoor, LinkedIn Salary before the call</li>
+            <li>Always negotiate — most offers have 10-20% flexibility</li>
+            <li>Be enthusiastic but not desperate</li>
+            <li>Ask about growth opportunities, team culture, and onboarding</li>
+            <li>Get the offer in writing before resigning from your current role</li>
+            <li>Thank the interviewer — it leaves a lasting impression</li>
+          </ul>
+          <div style="margin-top:16px;">
+            <button class="btn btn-primary btn-sm practice-btn" data-round="6" onclick="startPractice(6)">📝 Practice HR & Negotiation Q&As</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Interactive Practice Section -->
+    <div id="practice-section" class="card card-p-lg mb-32" style="background: linear-gradient(135deg, rgba(37,99,235,0.05), rgba(124,58,237,0.05)); border: 1px solid var(--border); display: none; margin-top: 24px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 16px;">
+        <div>
+          <div class="round-badge" id="practice-round-badge" style="background: rgba(124,58,237,0.15); color: var(--purple-light); border: 1px solid rgba(124,58,237,0.3); display: inline-block; margin-bottom: 8px;">📝 Practice Area</div>
+          <h2 id="practice-round-title" style="font-size: 24px; font-weight: 800; color: var(--text-primary); margin: 0;">Online Application + Resume Screening</h2>
+        </div>
+        <div>
+          <button id="generate-new-practice-btn" class="btn btn-outline btn-sm" onclick="generateNewPracticeQuestions()">
+            🔄 Generate New Questions
+          </button>
+        </div>
+      </div>
+
+      <p id="practice-round-desc" style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px; max-width: 800px;">
+        Here are the best practice questions and answers for this round. Read each question, think about your answer, then click to reveal the expert guide.
+      </p>
+
+      <!-- Practice Navigation Tabs -->
+      <div class="roadmap-practice-nav">
+        <button class="roadmap-practice-tab active" id="roadmap-tab-study" onclick="switchPracticeMode('study')">
+          📖 Study Guide Q&amp;As
+        </button>
+        <button class="roadmap-practice-tab" id="roadmap-tab-quiz" onclick="switchPracticeMode('quiz')">
+          ✏️ Interactive Quiz Mode
+        </button>
+      </div>
+
+      <!-- Study Mode Container -->
+      <div id="study-mode-container">
+        <!-- Loading spinner for AI generation -->
+        <div id="practice-loading" style="display: none; text-align: center; padding: 40px 0;">
+          <div class="loading-spinner-big"></div>
+          <p style="font-size: 15px; font-weight: 600; color: var(--text-primary); margin-top: 14px;">Generating brand new questions with AI...</p>
+          <p style="font-size: 12px; color: var(--text-muted);">This takes about 5-10 seconds. Gathering realistic interview inputs...</p>
+        </div>
+
+        <!-- Questions List -->
+        <div id="practice-questions-list" style="display: flex; flex-direction: column; gap: 16px;">
+          <!-- QAs will be injected here -->
+        </div>
+      </div>
+
+      <!-- Quiz Mode Container -->
+      <div id="quiz-mode-container" style="display: none;">
+        <!-- Quiz Loading Spinner -->
+        <div id="roadmap-quiz-loading" class="roadmap-quiz-loading" style="display: none;">
+          <div class="loading-spinner-big"></div>
+          <p style="font-size: 15px; font-weight: 600; color: var(--text-primary); margin-top: 14px;">Generating Round Quiz with AI...</p>
+          <p style="font-size: 12px; color: var(--text-muted);">Preparing 20 dynamic questions based on this round's topics...</p>
+        </div>
+
+        <!-- Active Quiz Area -->
+        <div id="roadmap-quiz-active-area" style="display: none;">
+          <!-- Progress Bar -->
+          <div class="quiz-progress-wrap">
+            <div class="quiz-progress-fill" id="roadmap-quiz-progress-fill"></div>
+          </div>
+          <!-- Question Card -->
+          <div class="quiz-card" id="roadmap-quiz-question-card" style="margin-top: 0; padding: 24px;">
+            <!-- Injected by JS -->
+          </div>
+        </div>
+
+        <!-- Quiz Results Area -->
+        <div id="roadmap-quiz-results-area" style="display: none;">
+          <!-- Score summary card -->
+          <div class="quiz-results-card" id="roadmap-quiz-results-summary" style="padding: 30px 20px;">
+            <!-- Injected by JS -->
+          </div>
+          <!-- Review List -->
+          <div class="quiz-review-section-title">Review Answers</div>
+          <div id="roadmap-quiz-review-list" style="display: flex; flex-direction: column; gap: 16px;">
+            <!-- Injected by JS -->
+          </div>
+          <!-- Action Buttons -->
+          <div style="margin-top: 30px; display: flex; justify-content: center; gap: 12px;">
+            <button class="btn btn-primary" onclick="restartRoadmapQuiz()">🔄 Retake Round Quiz</button>
+            <button class="btn btn-outline" onclick="switchPracticeMode('study')">📖 Back to Study Guide</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pro Tips Banner -->
+    <div class="card card-p-lg" style="margin-top:16px;background:linear-gradient(135deg,rgba(16,185,129,0.08),rgba(6,182,212,0.08));border-color:rgba(16,185,129,0.2);">
+      <h3 style="font-size:18px;font-weight:700;margin-bottom:16px;">🌟 Universal Tips for Every Round</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;">
+        <div style="padding:14px;background:rgba(255,255,255,0.03);border-radius:var(--radius-md);border:1px solid var(--border);">
+          <div style="font-size:24px;margin-bottom:8px;">⏰</div>
+          <div style="font-size:14px;font-weight:600;margin-bottom:4px;">Be 5 Minutes Early</div>
+          <div style="font-size:13px;color:var(--text-secondary);">For video calls, join early to test audio/video. For in-person, arrive 10 minutes before.</div>
+        </div>
+        <div style="padding:14px;background:rgba(255,255,255,0.03);border-radius:var(--radius-md);border:1px solid var(--border);">
+          <div style="font-size:24px;margin-bottom:8px;">🔍</div>
+          <div style="font-size:14px;font-weight:600;margin-bottom:4px;">Research the Company</div>
+          <div style="font-size:13px;color:var(--text-secondary);">Know their products, recent news, tech stack, and mission. This shows genuine interest.</div>
+        </div>
+        <div style="padding:14px;background:rgba(255,255,255,0.03);border-radius:var(--radius-md);border:1px solid var(--border);">
+          <div style="font-size:24px;margin-bottom:8px;">❓</div>
+          <div style="font-size:14px;font-weight:600;margin-bottom:4px;">Always Ask Questions</div>
+          <div style="font-size:13px;color:var(--text-secondary);">"What does success look like in this role?" shows you're serious and thoughtful.</div>
+        </div>
+        <div style="padding:14px;background:rgba(255,255,255,0.03);border-radius:var(--radius-md);border:1px solid var(--border);">
+          <div style="font-size:24px;margin-bottom:8px;">💪</div>
+          <div style="font-size:14px;font-weight:600;margin-bottom:4px;">Practice Out Loud Daily</div>
+          <div style="font-size:13px;color:var(--text-secondary);">Reading answers is different from speaking them. Practice with our AI interviewer every day.</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:36px;">
+      <a href="interview.html" class="btn btn-primary btn-lg">🎤 Practice Now with AI Interviewer</a>
+    </div>
+
+  </div>
+</main>
+
+<!-- API MODAL -->
+<div class="modal-overlay" id="api-modal">
+  <div class="modal" style="position:relative;">
+    <div class="modal-icon">🔑</div>
+    <h2 class="modal-title">Set Your Gemini API Key</h2>
+    <p class="modal-desc">Required for AI features. <a href="https://aistudio.google.com" target="_blank" style="color:var(--purple-light);">Get free key →</a></p>
+    <div class="form-group">
+      <label class="form-label">API Key</label>
+      <div style="display:flex;gap:8px;">
+        <input type="password" id="api-key-input" class="form-input" placeholder="AIza..." style="flex:1;">
+        <button id="api-key-toggle" style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:0 14px;cursor:pointer;font-size:18px;">👁️</button>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button id="api-key-save" class="btn btn-primary w-full">Save API Key 🔒</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/roadmap.js"></script>
+</body>
+</html>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Resume Builder – CareerBoost AI</title>
+  <meta name="description" content="Build a professional, ATS-optimized resume in minutes with AI assistance. Fill in your details and download a stunning resume PDF.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📄</text></svg>">
+</head>
+<body>
+
+<div class="bg-animated">
+  <div class="bg-orb"></div><div class="bg-orb"></div><div class="bg-orb"></div>
+</div>
+
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">🚀</div>
+    <span class="nav-logo-text">CareerBoost AI</span>
+  </a>
+  <div class="nav-links" id="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="interview.html" class="nav-link">AI Interview</a>
+    <a href="resume.html" class="nav-link active">Resume Builder</a>
+    <a href="roadmap.html" class="nav-link">Roadmap</a>
+    <a href="library.html" class="nav-link">Answer Library</a>
+  </div>
+  <div class="nav-right">
+    <button class="theme-toggle-btn" id="theme-toggle" title="Toggle light/dark mode">
+      <span class="icon-dark">🌙</span>
+      <span class="icon-light">☀️</span>
+    </button>
+    <button class="nav-api-btn open-api-modal">🔑 API Key</button>
+    <button class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<main class="page-content">
+  <div class="page-hero">
+    <div class="page-hero-badge">📄 AI Powered</div>
+    <h1 class="page-hero-title">AI <span class="gradient-text">Resume Builder</span></h1>
+    <p class="page-hero-subtitle">Fill in your details, and our AI will craft a stunning, ATS-friendly resume that makes recruiters stop scrolling.</p>
+  </div>
+
+  <div class="resume-wrap">
+    <div class="resume-builder-grid">
+
+      <!-- LEFT: FORM -->
+      <div>
+
+        <!-- Template Selector -->
+        <div class="builder-form-section" style="margin-bottom:20px;">
+          <div class="builder-section-title">
+            <div class="section-icon">🎨</div> Choose Resume Template
+          </div>
+          <div id="template-selector" class="template-selector"></div>
+        </div>
+
+        <!-- Resume Tabs Navigation -->
+        <div class="resume-tabs-nav">
+          <button class="resume-tab-btn active" id="resume-tab-editor" onclick="switchResumeTab('editor')">📄 Resume Details</button>
+          <button class="resume-tab-btn" id="resume-tab-ats" onclick="switchResumeTab('ats')">🎯 ATS Optimizer &amp; Tailor</button>
+        </div>
+
+        <div id="resume-editor-form">
+          <!-- Personal Info -->
+          <div class="builder-form-section">
+            <div class="builder-section-title">
+              <div class="section-icon">👤</div> Personal Information
+            </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Full Name <span class="form-required">*</span></label>
+              <input type="text" class="form-input" id="r-name" placeholder="John Doe">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Job Title / Target Role <span class="form-required">*</span></label>
+              <input type="text" class="form-input" id="r-title" placeholder="Frontend Developer">
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-input" id="r-email"
+                placeholder="john@email.com"
+                oninput="validateEmail(this)"
+                autocomplete="email">
+              <div class="field-hint" id="r-email-hint" style="font-size:11px;margin-top:4px;display:none;"></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone <span style="color:var(--text-muted);font-weight:400;">(10 digits)</span></label>
+              <input type="tel" class="form-input" id="r-phone"
+                placeholder="9876543210"
+                maxlength="10"
+                oninput="validatePhone(this)"
+                autocomplete="tel">
+              <div class="field-hint" id="r-phone-hint" style="font-size:11px;margin-top:4px;display:none;"></div>
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">LinkedIn</label>
+              <input type="text" class="form-input" id="r-linkedin"
+                placeholder="linkedin.com/in/yourname"
+                oninput="validateLinkedIn(this)">
+              <div class="field-hint" id="r-linkedin-hint" style="font-size:11px;margin-top:4px;display:none;"></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">GitHub / Portfolio</label>
+              <input type="text" class="form-input" id="r-github"
+                placeholder="github.com/yourname"
+                oninput="validateGitHub(this)">
+              <div class="field-hint" id="r-github-hint" style="font-size:11px;margin-top:4px;display:none;"></div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Location</label>
+            <input type="text" class="form-input" id="r-location" placeholder="Hyderabad, India">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Professional Summary (or let AI write it)</label>
+            <textarea class="form-textarea" id="r-summary" rows="3" placeholder="Brief summary of who you are, what you do, and what you're looking for..."></textarea>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Education -->
+        <div class="builder-form-section">
+          <div class="builder-section-title">
+            <div class="section-icon">🎓</div> Education
+          </div>
+          <div id="edu-list">
+            <div class="sub-card" id="edu-0">
+              <button class="sub-card-remove" onclick="removeItem('edu',0)" title="Remove">×</button>
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label">Degree / Course</label>
+                  <input type="text" class="form-input edu-degree" placeholder="B.Tech Computer Science">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">University / School</label>
+                  <input type="text" class="form-input edu-school" placeholder="JNTU Hyderabad">
+                </div>
+              </div>
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label">Year</label>
+                  <input type="text" class="form-input edu-year" placeholder="2021 – 2025">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">CGPA / Percentage</label>
+                  <input type="text" class="form-input edu-gpa" placeholder="8.5 / 10">
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="add-item-btn" onclick="addEdu()">+ Add Education</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Experience -->
+        <div class="builder-form-section">
+          <div class="builder-section-title">
+            <div class="section-icon">💼</div> Work Experience
+          </div>
+          <div id="exp-list"></div>
+          <button class="add-item-btn" onclick="addExp()">+ Add Experience / Internship</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Projects -->
+        <div class="builder-form-section">
+          <div class="builder-section-title">
+            <div class="section-icon">🛠️</div> Projects
+          </div>
+          <div id="proj-list">
+            <div class="sub-card" id="proj-0">
+              <button class="sub-card-remove" onclick="removeItem('proj',0)" title="Remove">×</button>
+              <div class="form-group">
+                <label class="form-label">Project Name</label>
+                <input type="text" class="form-input proj-name" placeholder="CareerBoost AI">
+              </div>
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label">Tech Stack</label>
+                  <input type="text" class="form-input proj-tech" placeholder="React, Node.js, MongoDB">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Link (optional)</label>
+                  <input type="text" class="form-input proj-link" placeholder="github.com/...">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="sub-card-header">
+                  <label class="form-label" style="margin:0;">Description</label>
+                  <button class="btn-ai-action" id="tailor-btn-proj-0" onclick="tailorBullets('proj', 0)" type="button">⚡ AI Tailor Bullet Points</button>
+                </div>
+                <textarea class="form-textarea proj-desc" rows="2" placeholder="What it does, what problem it solves, your role..."></textarea>
+              </div>
+            </div>
+          </div>
+          <button class="add-item-btn" onclick="addProj()">+ Add Project</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Skills -->
+        <div class="builder-form-section">
+          <div class="builder-section-title">
+            <div class="section-icon">⚡</div> Skills
+          </div>
+          <div class="form-group">
+            <label class="form-label">Technical Skills</label>
+            <div class="tags-wrap" id="tech-skills-wrap" onclick="document.getElementById('tech-skill-input').focus()">
+              <input type="text" class="tag-input-field" id="tech-skill-input" placeholder="Type skill & press Enter..." />
+            </div>
+            <div class="form-hint">Press Enter after each skill to add it as a tag</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Soft Skills</label>
+            <div class="tags-wrap" id="soft-skills-wrap" onclick="document.getElementById('soft-skill-input').focus()">
+              <input type="text" class="tag-input-field" id="soft-skill-input" placeholder="Type skill & press Enter..." />
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Achievements -->
+        <div class="builder-form-section">
+          <div class="builder-section-title">
+            <div class="section-icon">🏆</div> Achievements & Certifications
+          </div>
+          <div id="achieve-list">
+            <div class="form-group">
+              <textarea class="form-textarea" id="r-achievements" rows="4" placeholder="• Winner of XYZ Hackathon 2024&#10;• AWS Certified Cloud Practitioner&#10;• Completed 30-day coding challenge&#10;• Top performer in college coding club"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Generate Button -->
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;">
+          <button class="btn btn-primary btn-lg w-full" id="generate-resume-btn" onclick="generateResume()">
+            ✨ Generate AI Resume
+          </button>
+        </div>
+      </div> <!-- End #resume-editor-form -->
+
+      <!-- 🎯 ATS OPTIMIZER PANEL -->
+      <div id="resume-ats-panel" style="display:none; animation: fadeInUp 0.4s ease both;">
+        <div class="builder-form-section">
+          <div class="builder-section-title">
+            <div class="section-icon">🎯</div> AI ATS Optimizer
+          </div>
+          <p style="font-size:13px;color:var(--text-muted);line-height:1.6;margin-bottom:16px;">
+            Paste the job description of your target role. Our AI will analyze your resume details, calculate your match score, find missing keywords, and suggest layout improvements.
+          </p>
+
+          <div class="form-group">
+            <label class="form-label">Target Job Description <span class="form-required">*</span></label>
+            <textarea class="form-textarea" id="ats-job-desc" rows="6" placeholder="Paste the full job description here..."></textarea>
+          </div>
+
+          <button class="btn btn-primary w-full" id="ats-analyze-btn" onclick="analyzeATS()" style="font-size:14px;padding:12px;margin-top:4px;">
+            🎯 Analyze Match Score
+          </button>
+        </div>
+
+        <!-- ATS Result Area (Hidden initially) -->
+        <div id="ats-result-card" class="builder-form-section" style="display:none; margin-top:20px; animation: fadeInUp 0.3s ease both;">
+          <div class="ats-score-container">
+            <div class="ats-progress-ring">
+              <svg class="ats-ring-svg">
+                <defs>
+                  <linearGradient id="ats-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="var(--purple)" />
+                    <stop offset="100%" stop-color="var(--cyan)" />
+                  </linearGradient>
+                </defs>
+                <circle class="ats-ring-circle-bg" cx="45" cy="45" r="40" />
+                <circle class="ats-ring-circle" id="ats-ring-fill" cx="45" cy="45" r="40" />
+              </svg>
+              <div class="ats-score-text" id="ats-score-text">0%</div>
+            </div>
+            <div>
+              <div style="font-size:16px;font-weight:800;color:var(--text-primary);" id="ats-match-level">Needs Optimization</div>
+              <div style="font-size:12.5px;color:var(--text-muted);margin-top:2px;">Overall Applicant Tracking System Score</div>
+            </div>
+          </div>
+
+          <!-- Matches & Missing -->
+          <div style="margin-bottom:20px;">
+            <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:6px;">Critical Matching Keywords</div>
+            <div class="keyword-grid" id="ats-match-grid">
+              <!-- matching keyword badges -->
+            </div>
+          </div>
+
+          <div style="margin-bottom:20px;">
+            <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:6px;">Missing Critical Keywords (Action Required)</div>
+            <div style="font-size:12.5px;color:var(--text-muted);margin-bottom:8px;line-height:1.5;">
+              Add these keywords to your skills or work descriptions to boost your score. Use the <strong>⚡ AI Tailor</strong> button on your experience bullet points to integrate them automatically!
+            </div>
+            <div class="keyword-grid" id="ats-missing-grid">
+              <!-- missing keyword badges -->
+            </div>
+          </div>
+
+          <div>
+            <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:6px;">AI Optimization Roadmap</div>
+            <div style="font-size:13px;line-height:1.7;color:var(--text-secondary);background:var(--bg-secondary);padding:14px;border-radius:10px;border:1px solid var(--border);white-space:pre-wrap;" id="ats-feedback-text">
+              Loading analysis details...
+            </div>
+          </div>
+        </div>
+      </div>
+
+      </div>
+
+      <!-- RIGHT: PREVIEW -->
+      <div class="builder-panel">
+        <div class="card card-p mb-16" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+          <div>
+            <div style="font-size:15px;font-weight:700;">Resume Preview</div>
+            <div style="font-size:13px;color:var(--text-muted);">Updates when you click Generate</div>
+          </div>
+          <button class="btn btn-success btn-sm" id="download-btn" onclick="downloadResume()" disabled>⬇️ Download PDF</button>
+        </div>
+
+        <!-- Empty state -->
+        <div id="preview-empty" class="card card-p" style="text-align:center;padding:60px 24px;">
+          <div style="font-size:56px;margin-bottom:16px;">📄</div>
+          <div style="font-size:16px;font-weight:700;margin-bottom:8px;">Your resume preview will appear here</div>
+          <div style="font-size:14px;color:var(--text-muted);">Fill in your details and click "Generate AI Resume"</div>
+        </div>
+
+        <!-- Resume Preview -->
+        <div id="resume-preview-container" class="hidden">
+          <div class="resume-preview-wrap" id="resume-output">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<!-- API MODAL -->
+<div class="modal-overlay" id="api-modal">
+  <div class="modal" style="position:relative;">
+    <div class="modal-icon">🔑</div>
+    <h2 class="modal-title">Set Your Gemini API Key</h2>
+    <p class="modal-desc">Required to generate resume content with AI. <a href="https://aistudio.google.com" target="_blank" style="color:var(--purple-light);">Get free key →</a></p>
+    <div class="form-group">
+      <label class="form-label">API Key</label>
+      <div style="display:flex;gap:8px;">
+        <input type="password" id="api-key-input" class="form-input" placeholder="AIza..." style="flex:1;">
+        <button id="api-key-toggle" style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:0 14px;cursor:pointer;font-size:18px;">👁️</button>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button id="api-key-save" class="btn btn-primary w-full">Save API Key 🔒</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/resume.js"></script>
+</body>
+</html>
